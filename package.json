@@ -1,0 +1,28 @@
+{
+  "name": "bot",
+  "version": "1.0.0",
+  "description": "sample bot",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Gr8Gatsby/bot.git"
+  },
+  "keywords": [
+    "bot",
+    "sample",
+    "playground"
+  ],
+  "author": "Kevin Hill",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Gr8Gatsby/bot/issues"
+  },
+  "homepage": "https://github.com/Gr8Gatsby/bot",
+  "dependencies": {
+    "botbuilder": "^3.7.0",
+    "restify": "^4.3.0"
+  }
+}
