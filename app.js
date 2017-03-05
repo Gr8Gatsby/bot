@@ -75,6 +75,14 @@ bot.dialog('/picture', [
             session.send( (evt.loaded/evt.total) * 100 + "% loaded" );
         }
         function xhrComplete(evt) {
+            /*
+            var msg = new builder.Message(session)
+            .attachments([{
+                contentType: "image/jpeg",
+                contentUrl: "https://unsplash.it/200/200/?random"
+            }]);
+            */
+            session.send(evt.response);
             session.endDialog(msg);
         }
         function xhrFailed(evt) {
@@ -95,11 +103,8 @@ bot.dialog('/picture', [
         xhr.addEventListener("error", xhrFailed);
         xhr.addEventListener("abort", xhrCanceled);
 
-        var msg = new builder.Message(session)
-            .attachments([{
-                contentType: "image/jpeg",
-                contentUrl: "https://unsplash.it/200/200/?random"
-            }]);
+        xhr.open("GET", "https://unsplash.it/200/200/?random", true);
+        xhr.send();
         
     }
 ]);
