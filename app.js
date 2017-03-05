@@ -75,7 +75,7 @@ bot.dialog('/picture', [
         var msg = new builder.Message(session)
             .attachments([{
                 contentType: "image/jpeg",
-                contentUrl: "https://unsplash.it/100/100"
+                contentUrl: "https://unsplash.it/200/200/?random"
             }]);
         session.endDialog(msg);
     }
