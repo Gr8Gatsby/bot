@@ -35,6 +35,15 @@ intents.matches(/^change name/i, [
     }
 ]);
 
+intents.matches(/^show picture/i, [
+    function (session) {
+        session.beginDialog('/picture');
+    },
+    function (session,results) {
+        session.send('How about that picture?');
+    }
+]);
+
 intents.onDefault([
     function (session, args, next) {
         if (!session.userData.name) {
