@@ -70,13 +70,36 @@ bot.dialog('/profile', [
 
 bot.dialog('/picture', [
     function (session) {
-        session.send("Here is a picture...");
+
+        function xhrProgress(evt) {
+            session.send( (evt.loaded/evt.total) * 100 + "% loaded" );
+        }
+        function xhrComplete(evt) {
+            session.endDialog(msg);
+        }
+        function xhrFailed(evt) {
+            session.send("I couldn't find you an image :(");
+            session.endDialog();
+        }
+        function xhrCanceled(evt) {
+            session.send("I couldn't find you an image :(");
+            session.endDialog();
+        }
+        
+        session.send("I'm finding a picture for you...");
+
+        var xhr = new XMLHttpRequest();
+
+        xhr.addEventListener("progress", xhrProgress);
+        xhr.addEventListener("load", xhrComplete);
+        xhr.addEventListener("error", xhrFailed);
+        xhr.addEventListener("abort", xhrCanceled);
 
         var msg = new builder.Message(session)
             .attachments([{
                 contentType: "image/jpeg",
                 contentUrl: "https://unsplash.it/200/200/?random"
             }]);
-        session.endDialog(msg);
+        
     }
 ]);
