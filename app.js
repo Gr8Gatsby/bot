@@ -38,6 +38,7 @@ intents.matches(/^change name/i, [
 intents.onDefault([
     function (session, args, next) {
         if (!session.userData.name) {
+            session.beginDialog('/picture');
             session.beginDialog('/profile');
         } else {
             next();
@@ -55,5 +56,18 @@ bot.dialog('/profile', [
     function (session, results) {
         session.userData.name = results.response;
         session.endDialog();
+    }
+]);
+
+bot.dialog('/picture', [
+    function (session) {
+        session.send("Here is a picture...");
+
+        var msg = new builder.Message(session)
+            .attachments([{
+                contentType: "image/jpeg",
+                contentUrl: "https://unsplash.it/100/100"
+            }]);
+        session.endDialog(msg);
     }
 ]);
