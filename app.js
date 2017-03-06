@@ -1,5 +1,7 @@
 var builder = require('botbuilder');
 var restify = require('restify');
+var unsplash = require('unsplash-api');
+
 
 //=========================================================
 // Bot Setup
@@ -71,40 +73,25 @@ bot.dialog('/profile', [
 bot.dialog('/picture', [
     function (session) {
 
-        function xhrProgress(evt) {
-            session.send( (evt.loaded/evt.total) * 100 + "% loaded" );
-        }
-        function xhrComplete(evt) {
-            /*
-            var msg = new builder.Message(session)
-            .attachments([{
-                contentType: "image/jpeg",
-                contentUrl: "https://unsplash.it/200/200/?random"
-            }]);
-            */
-            session.send(evt.response);
-            session.endDialog(msg);
-        }
-        function xhrFailed(evt) {
-            session.send("I couldn't find you an image :(");
+        // Use unsplash's official API
+        var unsplashClientID = process.env.UNSPLASH_CLIENT_ID;
+        unsplash.init(unsplashClientID);
+        unsplash.getRandomPhoto(200,200,null, function(error, photo){
+            // session.send("error: " + error);
+            // session.send("photo:" + photo);
+            // Send a greeting and show help.
+            var card = new builder.HeroCard(session)
+                .title("Photo by " + photo.user.name)
+                .text(photo.links.portfolio)
+                .images([
+                    builder.CardImage.create(session, photo.urls.thumb)
+                ]);
+            var msg = new builder.Message(session).attachments([card]);
+            session.send(msg);
+            //photo.urls.thumb, photos.urls.raw, photo.user.name, photo.user.portfolio_url
+            // Photo by photo.user.name, photo.user.id, photo.user.links.portfolio
+
             session.endDialog();
-        }
-        function xhrCanceled(evt) {
-            session.send("I couldn't find you an image :(");
-            session.endDialog();
-        }
-        
-        session.send("I'm finding a picture for you...");
-
-        var xhr = new XMLHttpRequest();
-
-        xhr.addEventListener("progress", xhrProgress);
-        xhr.addEventListener("load", xhrComplete);
-        xhr.addEventListener("error", xhrFailed);
-        xhr.addEventListener("abort", xhrCanceled);
-
-        xhr.open("GET", "https://unsplash.it/200/200/?random", true);
-        xhr.send();
-        
+        });
     }
 ]);

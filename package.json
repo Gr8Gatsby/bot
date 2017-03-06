@@ -23,6 +23,8 @@
   "homepage": "https://github.com/Gr8Gatsby/bot",
   "dependencies": {
     "botbuilder": "^3.7.0",
-    "restify": "^4.3.0"
+    "request": "^2.80.0",
+    "restify": "^4.3.0",
+    "unsplash-api": "^1.2.0"
   }
 }
