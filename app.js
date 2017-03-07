@@ -84,14 +84,14 @@ bot.dialog('/picture', [
             // Send a greeting and show help.
             var card = new builder.HeroCard(session)
                 .title("Photo by " + photo.user.name)
-                .subtitle(photo.user.links.portfolio)
+                .subtitle('https://unsplash.com/@' + photo.user.username)
                 .images([
                     builder.CardImage.create(session, photo.urls.thumb)
                 ]);
             var msg = new builder.Message(session).attachments([card]);
             session.send(msg);
             //photo.urls.thumb, photos.urls.raw, photo.user.name, photo.user.portfolio_url
-            // Photo by photo.user.name, photo.user.id, photo.user.links.portfolio
+            //https://unsplash.com/@josswoodhead Photo by photo.user.name, photo.user.id, photo.user.links.portfolio
 
             session.endDialog();
         });
