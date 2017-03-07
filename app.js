@@ -84,7 +84,7 @@ bot.dialog('/picture', [
             // Send a greeting and show help.
             var card = new builder.HeroCard(session)
                 .title("Photo by " + photo.user.name)
-                .text(photo.links.portfolio)
+                .subtitle(photo.user.links.portfolio)
                 .images([
                     builder.CardImage.create(session, photo.urls.thumb)
                 ]);
