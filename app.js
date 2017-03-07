@@ -1,6 +1,8 @@
 var builder = require('botbuilder');
 var restify = require('restify');
-var unsplash = require('unsplash-api');
+var request = require('request');
+var path = require('path');
+var fs = require('fs');
 
 
 //=========================================================
@@ -75,8 +77,8 @@ bot.dialog('/picture', [
 
         // Use unsplash's official API
         var unsplashClientID = process.env.UNSPLASH_CLIENT_ID;
-        unsplash.init(unsplashClientID);
-        unsplash.getRandomPhoto(200,200,null, function(error, photo){
+       
+        getRandomPhoto(200,200,null, function(error, photo){
             // session.send("error: " + error);
             // session.send("photo:" + photo);
             // Send a greeting and show help.
@@ -95,3 +97,34 @@ bot.dialog('/picture', [
         });
     }
 ]);
+
+// UnSplash Random Photo
+function getRandomPhoto(width, height, rect, callback) {
+   var params = {};
+
+   if (width != null)
+      params.w = width;
+
+   if (height != null)
+      params.h = height;
+
+   if (rect != null)
+      params.rect = rect[0] + ',' + rect[1] + ',' + rect[2] + ',' + rect[3];
+
+   request({
+      url: ('https://api.unsplash.com/' + path.join('photos/random')),
+      method: 'GET',
+      qs: params,
+      headers: {
+         'Content-type': 'application/json',
+         'Authorization': 'Client-ID ' + process.env.UNSPLASH_CLIENT_ID
+      }
+   },
+   function(err, res, body){
+      if (err) return callback(err);
+
+      if (res.statusCode !== 200) return callback(new Error(body), null);
+
+      return callback(null, JSON.parse(body));
+   });
+}
