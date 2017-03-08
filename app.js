@@ -39,12 +39,23 @@ intents.matches(/^change name/i, [
     }
 ]);
 
-intents.matches(/^show picture/i, [
+// Random image
+intents.matches(/\b(?:img|photo|picture|image|pic)\b/i, [
     function (session) {
         session.beginDialog('/picture');
     },
     function (session,results) {
         session.send('How about that picture?');
+    }
+]);
+
+// Find
+intents.matches(/\b(?:find|search)\b/i, [
+    function (session) {
+        session.beginDialog('/find');
+    },
+    function (session,results) {
+        session.send('I hope that is what you want!');
     }
 ]);
 
@@ -72,6 +83,16 @@ bot.dialog('/profile', [
     }
 ]);
 
+bot.dialog('/find', [
+    function (session) {
+        console.log(session);
+    },
+    function (session, results) {
+        
+        session.endDialog();
+    }
+]);
+
 bot.dialog('/picture', [
     function (session) {
 
@@ -79,20 +100,18 @@ bot.dialog('/picture', [
         var unsplashClientID = process.env.UNSPLASH_CLIENT_ID;
        
         getRandomPhoto(200,200,null, function(error, photo){
-            // session.send("error: " + error);
-            // session.send("photo:" + photo);
-            // Send a greeting and show help.
+            // Create a card
             var card = new builder.HeroCard(session)
                 .title("Photo by " + photo.user.name)
                 .subtitle('https://unsplash.com/@' + photo.user.username)
                 .images([
                     builder.CardImage.create(session, photo.urls.thumb)
                 ]);
+            // Create message
             var msg = new builder.Message(session).attachments([card]);
             session.send(msg);
-            //photo.urls.thumb, photos.urls.raw, photo.user.name, photo.user.portfolio_url
-            //https://unsplash.com/@josswoodhead Photo by photo.user.name, photo.user.id, photo.user.links.portfolio
 
+            // End session
             session.endDialog();
         });
     }
