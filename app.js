@@ -50,9 +50,9 @@ intents.matches(/\b(?:img|photo|picture|image|pic)\b/i, [
 ]);
 
 // Find
-intents.matches(/\b(?:find|search)\b/i, [
+intents.matches(/^(?=.*\bfind\b)(?=.*\bimage|img|pic|picture|photo\b)/i, [
     function (session) {
-        session.beginDialog('/find');
+        session.beginDialog('/findImage');
     },
     function (session,results) {
         session.send('I hope that is what you want!');
@@ -96,7 +96,7 @@ bot.dialog('/findImage', [
     function (session) {
         // Need to support the search API for unsplash
         console.log(session);
-
+        session.send("looking for image...")
         // need to add more options than unsplash
     },
     function (session, results) {
