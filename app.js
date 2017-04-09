@@ -45,7 +45,7 @@ intents.matches(/\b(?:img|photo|picture|image|pic)\b/i, [
         session.beginDialog('/picture');
     },
     function (session,results) {
-        session.send('How about that picture?');
+        //session.send('How about that picture?');
     }
 ]);
 
@@ -59,10 +59,19 @@ intents.matches(/\b(?:find|search)\b/i, [
     }
 ]);
 
+// color
+intents.matches(/\b(?:color|colour)\b/i, [
+    function(session) {
+        session.beginDialog('/color');
+    },
+    function(session, results) {
+        session.send('here is a color pallete')
+    }
+]);
+
 intents.onDefault([
     function (session, args, next) {
         if (!session.userData.name) {
-            session.beginDialog('/picture');
             session.beginDialog('/profile');
         } else {
             next();
@@ -117,6 +126,30 @@ bot.dialog('/picture', [
     }
 ]);
 
+bot.dialog('/color', [
+    function(session) {
+        // Create a card
+        getColourPallete(function(error, pallete){
+            //var card = new builder.HeroCard(session)
+
+            for(i = 0; i < 3; i++){
+
+                var card = new builder.HeroCard(session)
+                .images([builder.CardImage.create(session, pallete[i].badgeUrl)])
+                .buttons([builder.CardAction.openUrl(session, pallete[i].url)]);
+                // Create message
+                var msg = new builder.Message(session).attachments([card]);
+                session.send(msg);
+            }
+
+            // End session
+            session.endDialog();
+        });
+        //session.send(msg);
+        session.endDialog();
+    }
+]);
+
 // UnSplash Random Photo
 function getRandomPhoto(width, height, rect, callback) {
    var params = {};
@@ -146,4 +179,17 @@ function getRandomPhoto(width, height, rect, callback) {
 
       return callback(null, JSON.parse(body));
    });
+}
+
+// Colourlovers.com get random color
+function getColourPallete(callback){
+
+    request('http://www.colourlovers.com/api/palettes?format=json',
+    function(err, res, body){
+        if(err) return callback(err);
+
+        if(res.statusCode !==200) return callback(new Error(body), null);
+
+        return callback(null, JSON.parse(body));
+    });
 }
