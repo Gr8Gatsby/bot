@@ -60,12 +60,12 @@ intents.matches(/\b(?:find|search)\b/i, [
 ]);
 
 // color
-intents.matches(/\b(?:color|colour)\b/i, [
+intents.matches(/\b(?:color|colour|colors|colours)\b/i, [
     function(session) {
         session.beginDialog('/color');
     },
     function(session, results) {
-        session.send('here is a color pallete')
+        session.send('here are some color palletes:')
     }
 ]);
 
@@ -92,9 +92,12 @@ bot.dialog('/profile', [
     }
 ]);
 
-bot.dialog('/find', [
+bot.dialog('/findImage', [
     function (session) {
+        // Need to support the search API for unsplash
         console.log(session);
+
+        // need to add more options than unsplash
     },
     function (session, results) {
         
@@ -132,11 +135,25 @@ bot.dialog('/color', [
         getColourPallete(function(error, pallete){
             //var card = new builder.HeroCard(session)
 
+            
             for(i = 0; i < 3; i++){
 
+                // Get all the colors
+                var colors = new String();
+                for(j = 0; j < pallete[i].colors.length; j++) {
+                    colors += "#" + pallete[i].colors[j] 
+                    if(j < pallete[i].colors.length - 1) {
+                        colors += ", ";
+                    } else {
+                        colors += " ";
+                    }
+                }
+
                 var card = new builder.HeroCard(session)
-                .images([builder.CardImage.create(session, pallete[i].badgeUrl)])
-                .buttons([builder.CardAction.openUrl(session, pallete[i].url)]);
+                .title(pallete[i].title)
+                .images([builder.CardImage.create(session, pallete[i].imageUrl)])
+                .text(colors + pallete[i].url)
+                
                 // Create message
                 var msg = new builder.Message(session).attachments([card]);
                 session.send(msg);
