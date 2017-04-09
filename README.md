@@ -7,3 +7,4 @@ This bot is just an infant, but it will grow. This repo is a place for me to lea
 * Ask for your name: Automatic
 * Change your name: "change name"
 * Show you a picture: "show picture"
+* Show a color pallete: "color"
