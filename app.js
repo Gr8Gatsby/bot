@@ -97,8 +97,8 @@ bot.dialog('/findImage', [
     function(session) {
         // Need to support the search API for unsplash
         console.log(session);
-        session.send("looking for image...")
-            // need to add more options than unsplash
+        session.send("looking for image...");
+        // need to add more options than unsplash
     },
     function(session, results) {
 
